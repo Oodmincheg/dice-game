@@ -10,12 +10,16 @@ GAME RULES:
 */
 
 let scores = [0, 0];
-var roundScore = 0;
+let roundScore = 0;
 let currentPlayer = 0;
 let diceDOM = document.querySelector(".dice");
 let gamePlaying;
+let previousDice = 0;
+let winnigScore;
+
 
 const changePlayer = () => {
+  previousDice = 0;
   roundScore = 0;
   document.querySelector("#current-" + currentPlayer).textContent = roundScore;
   currentPlayer === 0 ? (currentPlayer = 1) : (currentPlayer = 0);
@@ -25,9 +29,12 @@ const changePlayer = () => {
 };
 
 const init = () => {
+  winnigScore = document.getElementById('winning-score').value;
   gamePlaying = true;
   scores = [0, 0];
+  dices = []
   roundScore = 0;
+  previousDice = 0;
   currentPlayer = 0;
   document.querySelector(".player-0-panel").classList.add("active");
   document.querySelector(".player-1-panel").classList.remove("active");
@@ -50,15 +57,24 @@ document.querySelector(".btn-roll").addEventListener(
   (handleClickRoll = () => {
     if (gamePlaying) {
       let dice = Math.floor(Math.random() * 6) + 1;
-      diceDOM.style.display = "block";
-      diceDOM.src = "dice-" + dice + ".png";
-      if (dice !== 1) {
-        roundScore += dice;
-        document.querySelector(
-          "#current-" + currentPlayer
-        ).textContent = roundScore;
-      } else {
+      dices.push(dice)
+      if (dice === 6 && previousDice === 6) {
+        scores[currentPlayer] = 0;
+        document.getElementById("score-" + currentPlayer).textContent =
+          scores[currentPlayer];
         changePlayer();
+      } else {
+        diceDOM.style.display = "block";
+        diceDOM.src = "dice-" + dice + ".png";
+        if (dice !== 1) {
+          previousDice = dice;
+          roundScore += dice;
+          document.querySelector(
+            "#current-" + currentPlayer
+          ).textContent = roundScore;
+        } else {
+          changePlayer();
+        }
       }
     }
   })
@@ -71,7 +87,7 @@ document.querySelector(".btn-hold").addEventListener(
       scores[currentPlayer] += roundScore;
       document.getElementById("score-" + currentPlayer).textContent =
         scores[currentPlayer];
-      if (scores[currentPlayer] >= 20) {
+      if (scores[currentPlayer] >= winnigScore) {
         document.getElementById("name-" + currentPlayer).textContent = "Winner";
         diceDOM.style.display = "none";
         document

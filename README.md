@@ -5,3 +5,4 @@ turn to zero and your opponent plays. If you get two sixes a row ALL YOU SCORE t
 on the top of the screen. Good luck
 
 p.s. sorry for my english.
+[Demo](https://oodmincheg.github.io/dice-game/)
